@@ -3,19 +3,19 @@ package pl.agh.it.database
 import org.scalatest._
 import flatspec._
 import pl.agh.it.DatabaseTestHelper
-import pl.agh.it.database.config.DatabaseSchema
+import pl.agh.it.database.config.{BlockingTime, DatabaseSchema}
 import pl.agh.it.database.models.{DeleteProjectException, Project, Task}
 import slick.jdbc.JdbcBackend.Database
 
 import java.time.LocalDateTime
 import scala.concurrent.{Await, Future}
-import scala.concurrent.duration.Duration
 
-class ProjectsDaoTest extends AsyncFlatSpec with DatabaseSchema with DatabaseTestHelper {
+
+class ProjectsDaoTest extends AsyncFlatSpec with DatabaseSchema with DatabaseTestHelper with BlockingTime {
   val db = Database.forConfig("mysql")
-  Await.ready(createSchemaIfNotExists, Duration.Inf)
+
   val projectsDao: ProjectsDao = new ProjectsDao(db)
-  Await.ready(prepareDBForProjectTests, Duration.Inf)
+  Await.ready(prepareDBForProjectTests, getBlockingTime)
 
   behavior of "getAllProjects"
   it should "eventually return sequence of projects" in {

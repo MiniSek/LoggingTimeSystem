@@ -9,7 +9,7 @@ import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import pl.agh.it.DatabaseTestHelper
 import pl.agh.it.database.{ProjectsDao, TasksDao}
-import pl.agh.it.database.config.DatabaseSchema
+import pl.agh.it.database.config.{BlockingTime, DatabaseSchema}
 import pl.agh.it.server.config.MarshallingUnmarshallingConfiguration
 import slick.jdbc.JdbcBackend.Database
 
@@ -17,15 +17,14 @@ import scala.concurrent.Await
 import scala.concurrent.duration.Duration
 
 class AuthIntegrationTest extends AnyWordSpec with Matchers with ScalatestRouteTest with DatabaseTestHelper
-  with DatabaseSchema with MarshallingUnmarshallingConfiguration {
+  with DatabaseSchema with MarshallingUnmarshallingConfiguration with BlockingTime {
 
   val db = Database.forConfig("mysql")
+  Await.ready(createSchemaIfNotExists, getBlockingTime)
 
   val projectsDao: ProjectsDao = new ProjectsDao(db)
   val tasksDao: TasksDao = new TasksDao(db)
-
-  Await.ready(createSchemaIfNotExists, Duration.Inf)
-  Await.ready(clearDB, Duration.Inf)
+  Await.ready(clearDB, getBlockingTime)
 
   val jwtUser001: String = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJhdXRoMCIsIlVVSUQiOiJ1c2VyLXV1aWQtMDAxIn0.CGq0ri4JDkWSUWJadLo9EEHOG3pcnAx8cdMrKOxZFiA"
 

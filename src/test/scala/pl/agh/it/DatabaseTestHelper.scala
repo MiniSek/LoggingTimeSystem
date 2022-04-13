@@ -1,6 +1,6 @@
 package pl.agh.it
 
-import pl.agh.it.database.config.{DatabaseHelper, DatabaseSchema}
+import pl.agh.it.database.config.{BlockingTime, DatabaseHelper, DatabaseSchema}
 import pl.agh.it.database.models.{Project, Task}
 import pl.agh.it.server.config.LDTFormatterConfiguration
 import slick.jdbc.MySQLProfile.api._
@@ -10,13 +10,14 @@ import scala.concurrent.{Await, Future}
 import scala.concurrent.duration.Duration
 
 
-trait DatabaseTestHelper extends LDTFormatterConfiguration with DatabaseHelper {
+trait DatabaseTestHelper extends LDTFormatterConfiguration with DatabaseHelper with BlockingTime {
   self: DatabaseSchema =>
 
   def db: Database
 
   def prepareDBForProjectTests: Future[Unit] = {
-    Await.ready(createSchemaIfNotExists, Duration.Inf)
+    Await.ready(clearDB, getBlockingTime)
+    Await.ready(createSchemaIfNotExists, getBlockingTime)
     val timestamp = LocalDateTime.parse("2022-04-10T13:20:30.094", formatter)
     db.run(DBIO.seq(
       projects.delete, tasks.delete,
@@ -39,8 +40,8 @@ trait DatabaseTestHelper extends LDTFormatterConfiguration with DatabaseHelper {
     val timestamp1 = LocalDateTime.parse("2022-04-09T10:55:21.908", formatter)
     val timestamp2 = LocalDateTime.parse("2022-04-09T10:35:21.908", formatter)
 
-    Await.ready(db.run(allSchemas.dropIfExists), Duration.Inf)
-    Await.ready(createSchemaIfNotExists, Duration.Inf)
+    Await.ready(db.run(allSchemas.dropIfExists), getBlockingTime)
+    Await.ready(createSchemaIfNotExists, getBlockingTime)
 
     db.run(DBIO.seq(
       projects ++= Seq(
@@ -58,8 +59,8 @@ trait DatabaseTestHelper extends LDTFormatterConfiguration with DatabaseHelper {
   }
 
   def prepareDBForTaskIntegrationTests: Future[Unit] = {
-    Await.ready(db.run(allSchemas.dropIfExists), Duration.Inf)
-    Await.ready(createSchemaIfNotExists, Duration.Inf)
+    Await.ready(db.run(allSchemas.dropIfExists), getBlockingTime)
+    Await.ready(createSchemaIfNotExists, getBlockingTime)
     db.run(DBIO.seq(
       projects ++= Seq(
         Project("project-id-001", "user-uuid-001"),

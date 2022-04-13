@@ -1,23 +1,21 @@
 package pl.agh.it.server
 
-import pl.agh.it.database.config.{DatabaseHelper, DatabaseSchema}
+import pl.agh.it.database.config.{BlockingTime, DatabaseHelper, DatabaseSchema}
 import pl.agh.it.database.{ProjectsDao, TasksDao}
-
 import akka.actor.typed.ActorSystem
 import akka.actor.typed.scaladsl.Behaviors
 import akka.http.scaladsl.Http
 import slick.jdbc.JdbcBackend.Database
 
 import scala.concurrent.{Await, ExecutionContextExecutor}
-import scala.concurrent.duration.Duration
 import scala.io.StdIn
 
 /*
   Main app to run service.
 */
-object TimeLoggingService extends App with DatabaseSchema with DatabaseHelper {
+object TimeLoggingService extends App with DatabaseSchema with DatabaseHelper with BlockingTime {
   val db = Database.forConfig("mysql")
-  Await.ready(createSchemaIfNotExists, Duration.Inf)
+  Await.ready(createSchemaIfNotExists, getBlockingTime)
   println("---Service ready---")
 
   implicit val system: ActorSystem[Nothing] = ActorSystem(Behaviors.empty, "my-system")
