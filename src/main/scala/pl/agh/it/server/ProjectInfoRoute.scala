@@ -7,6 +7,7 @@ import pl.agh.it.database.ProjectsDao
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
 import pl.agh.it.database.models.{Project, Task}
 import pl.agh.it.server.TimeLoggingService.projectsDao
+import pl.agh.it.server.config.MarshallingUnmarshallingConfiguration
 import pl.agh.it.server.models.SortBy.SortByField
 import pl.agh.it.server.models._
 

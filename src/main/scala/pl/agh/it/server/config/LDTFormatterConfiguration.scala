@@ -1,4 +1,4 @@
-package pl.agh.it.server
+package pl.agh.it.server.config
 
 import java.time.format.DateTimeFormatter
 

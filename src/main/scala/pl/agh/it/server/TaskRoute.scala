@@ -5,13 +5,12 @@ import akka.http.scaladsl.server.Directives.{as, complete, concat, delete, entit
 import akka.http.scaladsl.server.Route
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
-
 import pl.agh.it.database.TasksDao
 import pl.agh.it.database.models.{NoSuchProjectException, Task}
+import pl.agh.it.server.config.{LDTFormatterConfiguration, MarshallingUnmarshallingConfiguration}
 import pl.agh.it.server.models.{AddTaskRequest, ChangeTaskAttributesRequest, DeleteTaskRequest}
 
 import concurrent.ExecutionContext.Implicits.global
-
 import java.time.LocalDateTime
 import scala.util.{Failure, Success}
 

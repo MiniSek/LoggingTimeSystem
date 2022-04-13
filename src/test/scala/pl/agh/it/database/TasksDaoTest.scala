@@ -1,16 +1,17 @@
 package pl.agh.it.database
 
 import org.scalatest.flatspec.AsyncFlatSpec
-import pl.agh.it.database.configuration.{DatabaseHelper, DatabaseSchema}
+import pl.agh.it.DatabaseTestHelper
+import pl.agh.it.database.config.DatabaseSchema
 import pl.agh.it.database.models.Task
-import pl.agh.it.server.LDTFormatterConfiguration
+import pl.agh.it.server.config.LDTFormatterConfiguration
 import slick.jdbc.JdbcBackend.Database
 
 import java.time.LocalDateTime
 import scala.concurrent.{Await, Future}
 import scala.concurrent.duration.Duration
 
-class TasksDaoTest extends AsyncFlatSpec with DatabaseSchema with DatabaseHelper with LDTFormatterConfiguration {
+class TasksDaoTest extends AsyncFlatSpec with DatabaseSchema  with DatabaseTestHelper with LDTFormatterConfiguration {
   val db = Database.forConfig("mysql")
   Await.ready(createSchemaIfNotExists, Duration.Inf)
 

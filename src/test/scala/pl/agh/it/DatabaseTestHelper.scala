@@ -1,34 +1,22 @@
-package pl.agh.it.database.configuration
+package pl.agh.it
 
+import pl.agh.it.database.config.{DatabaseHelper, DatabaseSchema}
 import pl.agh.it.database.models.{Project, Task}
-import pl.agh.it.server.LDTFormatterConfiguration
+import pl.agh.it.server.config.LDTFormatterConfiguration
 import slick.jdbc.MySQLProfile.api._
-import slick.jdbc.meta.MTable
 
 import java.time.LocalDateTime
 import scala.concurrent.{Await, Future}
-import concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.Duration
 
-trait DatabaseHelper extends LDTFormatterConfiguration {
+
+trait DatabaseTestHelper extends LDTFormatterConfiguration with DatabaseHelper {
   self: DatabaseSchema =>
 
   def db: Database
 
-  def createSchemaIfNotExists: Future[Unit] = {
-    db.run(MTable.getTables).flatMap(tables =>
-      if (tables.isEmpty)
-        db.run(allSchemas.create)
-      else
-        Future.successful()
-    )
-  }
-
-  def clearDB: Future[Unit] = {
-    db.run(DBIO.seq(projects.delete, tasks.delete))
-  }
-
   def prepareDBForProjectTests: Future[Unit] = {
+    Await.ready(createSchemaIfNotExists, Duration.Inf)
     val timestamp = LocalDateTime.parse("2022-04-10T13:20:30.094", formatter)
     db.run(DBIO.seq(
       projects.delete, tasks.delete,
@@ -55,8 +43,6 @@ trait DatabaseHelper extends LDTFormatterConfiguration {
     Await.ready(createSchemaIfNotExists, Duration.Inf)
 
     db.run(DBIO.seq(
-      projects.delete, tasks.delete,
-
       projects ++= Seq(
         Project("project-id-001", "user-uuid-001"),
         Project("project-id-002", "user-uuid-002"),
@@ -67,6 +53,17 @@ trait DatabaseHelper extends LDTFormatterConfiguration {
         Task(authorUuid = "user-uuid-001", projectId = "project-id-003", startTimestamp = timestamp1, durationInSeconds = 50),
         Task(authorUuid = "user-uuid-002", projectId = "project-id-001", startTimestamp = timestamp1, durationInSeconds = 130),
         Task(authorUuid = "user-uuid-002", projectId = "project-id-001", startTimestamp = timestamp2, durationInSeconds = 60)
+      )
+    ))
+  }
+
+  def prepareDBForTaskIntegrationTests: Future[Unit] = {
+    Await.ready(db.run(allSchemas.dropIfExists), Duration.Inf)
+    Await.ready(createSchemaIfNotExists, Duration.Inf)
+    db.run(DBIO.seq(
+      projects ++= Seq(
+        Project("project-id-001", "user-uuid-001"),
+        Project("project-id-002", "user-uuid-001")
       )
     ))
   }

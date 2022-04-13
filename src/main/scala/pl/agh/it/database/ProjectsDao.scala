@@ -1,6 +1,6 @@
 package pl.agh.it.database
 
-import pl.agh.it.database.configuration.DatabaseSchema
+import pl.agh.it.database.config.DatabaseSchema
 import pl.agh.it.database.models.{DeleteProjectException, Project, Task}
 import slick.jdbc.MySQLProfile.api._
 

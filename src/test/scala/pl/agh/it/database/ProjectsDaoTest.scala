@@ -2,7 +2,8 @@ package pl.agh.it.database
 
 import org.scalatest._
 import flatspec._
-import pl.agh.it.database.configuration.{DatabaseHelper, DatabaseSchema}
+import pl.agh.it.DatabaseTestHelper
+import pl.agh.it.database.config.DatabaseSchema
 import pl.agh.it.database.models.{DeleteProjectException, Project, Task}
 import slick.jdbc.JdbcBackend.Database
 
@@ -10,7 +11,7 @@ import java.time.LocalDateTime
 import scala.concurrent.{Await, Future}
 import scala.concurrent.duration.Duration
 
-class ProjectsDaoTest extends AsyncFlatSpec with DatabaseSchema with DatabaseHelper {
+class ProjectsDaoTest extends AsyncFlatSpec with DatabaseSchema with DatabaseTestHelper {
   val db = Database.forConfig("mysql")
   Await.ready(createSchemaIfNotExists, Duration.Inf)
   val projectsDao: ProjectsDao = new ProjectsDao(db)

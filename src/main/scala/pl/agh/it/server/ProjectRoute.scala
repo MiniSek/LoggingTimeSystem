@@ -6,6 +6,7 @@ import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
 import akka.http.scaladsl.server.Route
 import pl.agh.it.database.ProjectsDao
 import pl.agh.it.database.models.{DeleteProjectException, Project}
+import pl.agh.it.server.config.MarshallingUnmarshallingConfiguration
 import pl.agh.it.server.models._
 
 import scala.util.{Failure, Success}

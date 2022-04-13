@@ -1,4 +1,4 @@
-package pl.agh.it.database.configuration
+package pl.agh.it.database.config
 
 import pl.agh.it.database.models.{Project, Task}
 import slick.lifted.Tag

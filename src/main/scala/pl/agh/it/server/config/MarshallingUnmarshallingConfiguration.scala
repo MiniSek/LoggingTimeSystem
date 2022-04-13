@@ -1,7 +1,7 @@
-package pl.agh.it.server
+package pl.agh.it.server.config
 
 import pl.agh.it.database.models.{Project, Task}
-import pl.agh.it.server.models.{AddTaskRequest, AllProjectsResponse, ChangeProjectIdRequest, ChangeTaskAttributesRequest, DeleteTaskRequest, ProjectIdRequest, ProjectTasksDurationResponse, ProjectTasksResponse}
+import pl.agh.it.server.models._
 import spray.json.DefaultJsonProtocol.{jsonFormat1, jsonFormat2, jsonFormat3, jsonFormat4, jsonFormat5, jsonFormat9}
 import spray.json.{JsString, JsValue, JsonFormat, RootJsonFormat, deserializationError}
 import spray.json.DefaultJsonProtocol._
