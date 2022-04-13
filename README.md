@@ -5,12 +5,12 @@ It's REST API service for time logging. Technology used:
  - Slick as database access library
  - Akka HTTp for HTTP request management
 
-Run service and send endpoints.
+To run service file src\main\resources\application.conf need to be updated with MySQL access data (database url, user and password). After that service can be activated by runing src\main\scala\pl\agh\it\server\TimeLoggingService object.
 Every request must contain JWT token which can be verified by service. Here are three of them for testing:
  - user-uuid-001 -> eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJhdXRoMCIsIlVVSUQiOiJ1c2VyLXV1aWQtMDAxIn0.CGq0ri4JDkWSUWJadLo9EEHOG3pcnAx8cdMrKOxZFiA
  - user-uuid-002 -> eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJhdXRoMCIsIlVVSUQiOiJ1c2VyLXV1aWQtMDAyIn0.x24PynKwFBgypw-IlCNUMFZyvgc5eZ1188kyfWJAUx0
  - user-uuid-003 -> eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJhdXRoMCIsIlVVSUQiOiJ1c2VyLXV1aWQtMDAzIn0.-wFQYChHUhhU8c_UmjaGpMigGYG1ZkdUNBvoY7r7_20
-Remember that header Access-Token must start with 'Bearer '
+Header Access-Token must start with 'Bearer '
 
 Available endpoints:
  1) Projects management:
